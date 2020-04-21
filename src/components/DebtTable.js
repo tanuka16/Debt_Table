@@ -4,9 +4,34 @@ import React, { Component } from 'react';
 class DebtTable extends Component {
 
 
+
+  onSelectAll = () => {
+    const parent = document.getElementById("parent");
+    let input = document.getElementsByTagName('input');
+    // console.log(this.state);
+
+    if(parent.checked ===  true){
+      for (var i = 0; i < input.length; i++) {
+        if(input[i].type ==="checkbox" && input[i].id === "child_check" && input[i].checked === false){
+          input[i].checked = true;
+          // console.log(input[i]);
+        }
+      }
+    }
+    else if(parent.checked ===  false){
+      for (var i = 0; i < input.length; i++) {
+        if(input[i].type ==="checkbox" && input[i].id === "child_check" && input[i].checked===true){
+          input[i].checked = false;
+          // console.log(input[i]);
+        }
+      }
+    }
+  }
+
+
   //Select each checkbox === done
   onSelectChange =(e)=>{
-    // e.preventDefault()
+    e.preventDefault()
     this.setState({ [e.target.name]: e.target.checked })
     console.log(e.target.checked);
   }
@@ -19,7 +44,8 @@ class DebtTable extends Component {
         <thead>
         <tr>
           <th className="select_all">
-            <input type="checkbox" 
+            <input type="checkbox" type="checkbox" name="check" id="parent"
+            onClick={this.onSelectAll.bind(this)}
             />
           </th>
           <th>CreditorName</th>

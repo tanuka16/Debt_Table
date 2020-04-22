@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 
 
 class DebtTable extends Component {
-
-
+  state={
+    checked: false,
+    count: 0
+  }
 
   onSelectAll = () => {
     const parent = document.getElementById("parent");
@@ -36,6 +38,22 @@ class DebtTable extends Component {
     console.log(e.target.checked);
   }
 
+  handleCheckCount=(e)=> {
+
+    const { checked, type } = e.target;
+    let count= this.state.count
+      if (type === "checkbox" && checked === true) {
+        this.setState(state => state.count+=1, this.logCount)
+      } else {
+        this.setState(state => state.count-=1, this.logCount)
+      }
+    // }
+  }
+
+  logCount() {
+    console.log(this.state.count);
+  }
+
 
   render(){
     return (
@@ -46,6 +64,7 @@ class DebtTable extends Component {
           <th className="select_all">
             <input type="checkbox" type="checkbox" name="check" id="parent"
             onClick={this.onSelectAll.bind(this)}
+            onChange={e => this.handleCheckCount(e)}
             />
           </th>
           <th>CreditorName</th>
@@ -62,7 +81,8 @@ class DebtTable extends Component {
                   <tr key={debt.id}>
                       <td className="select">
                         <input type="checkbox" name="check1" id="child_check"
-                          onChange={this.onSelectChange.bind(this)}
+                          onChange={this.onSelectChange}
+                          onChange={e => this.handleCheckCount(e)}
                          />
                       </td>
                       <td>{debt.creditorName}</td>
@@ -76,7 +96,7 @@ class DebtTable extends Component {
           </tbody>
         </table>
 
-
+        <h2>Total Number of Checkbox Selected: {this.state.count}</h2>
       </div>
     );
   }

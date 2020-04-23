@@ -68,6 +68,23 @@ class DebtTable extends Component {
     // this.setState({checked})
     // console.log(checked);
   }
+// Not working yet
+  calculateTotal=()=> {
+    var total = 0;
+    // get the checked boxes only
+    var checks = document.querySelectorAll('.optional:checked');
+    for (var i = 0; i < checks.length; ++i) {
+      var check = checks[i];
+      // find the ID of the input to use
+      var input = document.getElementsByTagName('input');
+      var val = input.value;
+      // handle poor or no input - is in principle already handled by the type="number"
+      val = (isNaN(val) || "" === val.trim()) ? 0 : parseFloat(val);
+      total += val;
+    }
+    document.getElementById('toptional').value = total;
+    console.log(total);
+  }
 
 
   render(){
@@ -98,6 +115,7 @@ class DebtTable extends Component {
                         <input type="checkbox" name="check1" id="child_check"
                           onChange={this.onSelectChange}
                           onChange={e => this.handleCheckCount(e)}
+                          calculateTotal={()=>this.calculateTotal}
                          />
                       </td>
                       <td>{debt.creditorName}</td>

@@ -58,11 +58,27 @@ class App extends Component {
       // })
     this.setState({debt: [...this.state.debt, newDebt]})
   }
+
+  handleRemove=(debt)=>{
+    // console.log(debt1);
+    // console.log(this.state);
+
+    let index = this.state.debt.findIndex(debtTable => debtTable.id === debt.id)
+     console.log('index', index);
+     let debts = [...this.state.debt]
+     debts.splice(index, 1)
+     this.setState({
+       debt: debts
+     })
+
+     // console.log(debts);
+     // this.setState({portfolio: [debt, ...this.state.debt]})
+  }
   render(){
     return (
       <div>
         <h1>Debt Table</h1>
-        <DebtTable debt={this.state.debt}/>
+        <DebtTable debt={this.state.debt} handleRemove={this.handleRemove}/>
         <DebtForm onNewDebtSubmit={this.handleNewDebtSubmit}/>
       </div>
     );

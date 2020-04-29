@@ -10,64 +10,50 @@ class DebtTable extends Component {
   onSelectAll = () => {
     const parent = document.getElementById("parent");
     let input = document.getElementsByTagName('input');
-    // console.log(this.state);
+    let count = this.state.count
+
 
     if(parent.checked ===  true){
       for (var i = 0; i < input.length; i++) {
         if(input[i].type ==="checkbox" && input[i].id === "child_check" && input[i].checked === false){
-          input[i].checked = true;
+          if(input[i].checked = true){
+            count++;
+          }
           // console.log(input[i]);
         }
       }
     }
     else if(parent.checked ===  false){
-      for (var i = 0; i < input.length; i++) {
-        if(input[i].type ==="checkbox" && input[i].id === "child_check" && input[i].checked===true){
-          input[i].checked = false;
+      for (var j = 0; j < input.length; j++) {
+        if(input[j].type ==="checkbox" && input[j].id === "child_check" && input[j].checked===true){
+          if(input[j].checked = false){
+            count--;
+          }
           // console.log(input[i]);
         }
       }
     }
+    this.setState(prevState=>({...prevState, count}))
   }
 
 
-  //Select each checkbox === done
+
+  //Select each checkbox and count the checked boxes
   onSelectChange =(e)=>{
-    e.preventDefault()
-    this.setState({ [e.target.name]: e.target.checked })
-    console.log(e.target.checked);
+  // e.preventDefault()
+  let count = this.state.count
+  const { type, checked, name} = e.target;
+  this.setState({ [name]: checked })
+  // counts the selected chckboxes
+  if(type === "checkbox" && checked === true){
+    count++;
+  }else {
+    count--;
   }
+  this.setState(prevState=>({...prevState, count}))
+  // console.log(e.target.checked);
+}
 
-  handleCheckCount=(e)=> {
-
-    const { checked, type } = e.target;
-    let count= this.state.count
-      if (type === "checkbox" && checked === true) {
-        this.setState(state => state.count+=1, this.logCount)
-      } else {
-        this.setState(state => state.count-=1, this.logCount)
-      }
-    // }
-  }
-
-  logCount() {
-    console.log(this.state.count);
-  }
-//Not working
-  handleRemove=(e)=>{
-    let input = document.getElementsByTagName('input');
-    if(input.checked ===  true){
-      this.props.handleRemove()
-    }
-    // console.log(this.props.handleRemove);
-    // const { checked, type } = e.target;
-    // if(type === "checkbox" && checked === true){
-    //   this.props.handleRemove()
-    // }
-    // const checked = this.state.checked.filter(i => i.id !== debt.id)
-    // this.setState({checked})
-    // console.log(checked);
-  }
 // Not working yet
   calculateTotal=()=> {
     var total = 0;
@@ -96,7 +82,7 @@ class DebtTable extends Component {
           <th className="select_all">
             <input type="checkbox" type="checkbox" name="check" id="parent"
             onClick={this.onSelectAll.bind(this)}
-            onChange={e => this.handleCheckCount(e)}
+            // onChange={e => this.handleCheckCount(e)}
             />
           </th>
           <th>CreditorName</th>
@@ -114,7 +100,7 @@ class DebtTable extends Component {
                       <td className="select">
                         <input type="checkbox" name="check1" id="child_check"
                           onChange={this.onSelectChange}
-                          onChange={e => this.handleCheckCount(e)}
+                          // onChange={e => this.handleCheckCount(e)}
                           calculateTotal={()=>this.calculateTotal}
                          />
                       </td>
@@ -136,7 +122,7 @@ class DebtTable extends Component {
             Total Row Count: {this.props.debt.length}</span>
           </h5>
 
-            <div className='dbutton' onClick={this.props.handleRemove} onChange={()=>this.handleRemove()}>
+            <div className='dbutton' onClick={this.props.handleRemove} >
             <button>REMOVE</button>
             </div>
             <br  />

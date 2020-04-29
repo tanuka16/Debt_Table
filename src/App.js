@@ -8,6 +8,7 @@ class App extends Component {
     debt: []
   }
 
+    //dynamicly grabs data from an array of debts
   componentDidMount(){
     fetch("https://raw.githubusercontent.com/StrategicFS/Recruitment/master/data.json")
       .then(res => res.json())
@@ -17,67 +18,67 @@ class App extends Component {
       })
     }
 
-    //dynamicly grabs data from an array of objects
-  componentDidMount(){
-    fetch("https://raw.githubusercontent.com/StrategicFS/Recruitment/master/data.json")
-      .then(res => res.json())
-      .then((debtData) => {
-        this.setState({ debt: debtData})
-        // console.log(this.state)
-      })
-    }
-
+    // Add new data
   handleNewDebtSubmit = (newDebtData) => {
-  const newDebt = {
-        creditorName: newDebtData.creditorName,
-        firstName: newDebtData.firstName,
-        lastName: newDebtData.lastName,
-        minPaymentPercentage: newDebtData.minPaymentPercentage,
-        balance: newDebtData.balance
-      };
-      console.log(newDebt);
-      // const proxyurl = { "/*": { "target": "http://localhost:3000" } }
-      // const proxyurl = "http://localhost:3000/"
-      // const url = "https://raw.githubusercontent.com/StrategicFS/Recruitment/master/data.json"
-      // fetch( (proxyurl + url), {
-      //   method: 'POST',
-      //     headers: {
-      //       // 'Authorization': 'Basic'+ auth,
-      //       // 'Origin': "https://raw.githubusercontent.com/StrategicFS/Recruitment/master/data.json",
-      //       // 'Access-Control-Request-Method': "POST, GET, OPTIONS, DELETE, PUT",
-      //       // 'Access-Control-Request-Headers': 'http://localhost:3000/',
-      //       'Content-Type': 'application/json',
-      //       'Accept': 'application/json'
-      //     },
-      //     body: JSON.stringify(newDebt)
-      // })
-      // .then(res => res.json())
-      // .then(debtNew => {                                                  //console.log(debtNew)
-      //   this.setState({debt: [...this.state.debt, debtNew]})
-      // .catch(() => console.log("Can’t access " + url + " response. Blocked by browser?"))
-      // })
-    this.setState({debt: [...this.state.debt, newDebt]})
-  }
+      const newDebt = {
+            creditorName: newDebtData.creditorName,
+            firstName: newDebtData.firstName,
+            lastName: newDebtData.lastName,
+            minPaymentPercentage: newDebtData.minPaymentPercentage,
+            balance: newDebtData.balance
+          };
+          console.log(newDebt);
+          // const proxyurl = { "/*": { "target": "http://localhost:3000" } }
+          const proxyurl = "http://localhost:3000/"
+          const url = "https://raw.githubusercontent.com/StrategicFS/Recruitment/master/data.json"
+          fetch((proxyurl + url), {
+            method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify(newDebt)
+          })
+          .then(res => res.json())
+          .then(debtNew => {                                                  //console.log(debtNew)
+            this.setState({debt: [...this.state.debt, debtNew]})
+            //here I'm making a copy of all the debt data and prepending to it .obj(this.state.debt)
+            })
+        // this.setState({debt: [...this.state.debt, newDebt]})
 
+      }
+
+  // Delete data
   handleRemove=(debt)=>{
-    // console.log(debt1);
-    // console.log(this.state);
 
-    let index = this.state.debt.findIndex(debtTable => debtTable.id === debt.id)
-     console.log('index', index);
-     let debts = [...this.state.debt]
-     debts.splice(index, 1)
-     this.setState({
-       debt: debts
-     })
-
-     // console.log(debts);
-     // this.setState({portfolio: [debt, ...this.state.debt]})
-  }
+      let index = this.state.debt.findIndex(debtTable => debtTable.id === debt.id)
+       console.log('index', index);
+       let debts = [...this.state.debt]
+       debts.splice(index, 1)
+       const proxyurl = "http://localhost:3000/"
+       const url = "https://raw.githubusercontent.com/StrategicFS/Recruitment/master/data.json${id}"
+       fetch((proxyurl + url), {
+         method: 'DELETE',
+                  headers: {
+                      'Accept': 'application/json',
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({index})
+               }).then(res => res.json())
+                .then(index => {
+                  this.setState({
+                    debt: debts
+                  })
+                })
+                // console.log(debts);
+                // this.setState({debt: debts})
+    }
   render(){
+    // console.log(this.state.debt)
     return (
       <div>
         <h1>Debt Table</h1>
+        {/* render down my debts*/}
         <DebtTable debt={this.state.debt} handleRemove={this.handleRemove}/>
         <DebtForm onNewDebtSubmit={this.handleNewDebtSubmit}/>
       </div>

@@ -4,7 +4,8 @@ import React, { Component } from 'react';
 class DebtTable extends Component {
   state={
     checked: false,
-    count: 0
+    count: 0,
+    total: 0
   }
 
   onSelectAll = () => {
@@ -54,22 +55,21 @@ class DebtTable extends Component {
   // console.log(e.target.checked);
 }
 
-// Not working yet
-  calculateTotal=()=> {
-    var total = 0;
-    // get the checked boxes only
-    var checks = document.querySelectorAll('.optional:checked');
-    for (var i = 0; i < checks.length; ++i) {
-      var check = checks[i];
-      // find the ID of the input to use
-      var input = document.getElementsByTagName('input');
-      var val = input.value;
-      // handle poor or no input - is in principle already handled by the type="number"
-      val = (isNaN(val) || "" === val.trim()) ? 0 : parseFloat(val);
-      total += val;
-    }
-    document.getElementById('toptional').value = total;
+  calculateTotal=(e)=> {
+    const {checked} = e.target;
+    let total= this.state.total;
+    // let checked = this.state.checked
+    this.props.debts.forEach((debt)=> {
+      if(checked){
+        (total += debt.balance)
+      }else{
+        (total -= debt.balance)
+      }
+    })
+
+    this.setState(prevState=>({...prevState, total}))
     console.log(total);
+    // document.getElementById("val").innerHTML = "Sum Value =" + total;
   }
 
 
@@ -83,6 +83,7 @@ class DebtTable extends Component {
             <input type="checkbox" type="checkbox" name="check" id="parent"
             onClick={this.onSelectAll.bind(this)}
             // onChange={e => this.handleCheckCount(e)}
+            onChange={this.calculateTotal}
             />
           </th>
           <th>CreditorName</th>
@@ -94,14 +95,13 @@ class DebtTable extends Component {
         </thead>
           <tbody>
           {
-            this.props.debt.map(debt => {
+            this.props.debts.map(debt => {
               return(
                   <tr key={debt.id}>
                       <td className="select">
                         <input type="checkbox" name="check1" id="child_check"
                           onChange={this.onSelectChange}
-                          // onChange={e => this.handleCheckCount(e)}
-                          calculateTotal={()=>this.calculateTotal}
+                          // onChange={this.calculateTotal}
                          />
                       </td>
                       <td>{debt.creditorName}</td>
@@ -116,11 +116,12 @@ class DebtTable extends Component {
         </table>
 
         <div>
-          <h5>
+        <h4>Total: {this.state.total}</h4>
+
             Check Row Count: {this.state.count}
             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Total Row Count: {this.props.debt.length}</span>
-          </h5>
+            Total Row Count: {this.props.debts.length}</span>
+
 
             <div className='dbutton' onClick={this.props.handleRemove} >
             <button>REMOVE</button>

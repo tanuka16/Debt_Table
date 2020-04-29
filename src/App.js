@@ -79,7 +79,7 @@ class App extends Component {
       <div>
         <h1>Debt Table</h1>
         {/* render down my debts*/}
-        <DebtTable debt={this.state.debt} handleRemove={this.handleRemove}/>
+        <DebtTable debts={this.state.debt} handleRemove={this.handleRemove}/>
         <DebtForm onNewDebtSubmit={this.handleNewDebtSubmit}/>
       </div>
     );

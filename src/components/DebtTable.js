@@ -75,60 +75,69 @@ class DebtTable extends Component {
 
   render(){
     return (
-      <div>
-        <table>
+      <div className="container">
+        <table className="center" id="table" >
         <thead>
         <tr>
           <th className="select_all">
-            <input type="checkbox" type="checkbox" name="check" id="parent"
-            onClick={this.onSelectAll.bind(this)}
-            // onChange={e => this.handleCheckCount(e)}
-            onChange={this.calculateTotal}
-            />
+            <input type="checkbox" name="check" id="parent"
+              onClick={this.onSelectAll.bind(this)}
+              onChange={this.calculateTotal}
+              />
+
           </th>
           <th>CreditorName</th>
           <th>FirstName</th>
           <th>LastName</th>
-          <th>MinPaymentPercentage</th>
+          <th>Min Pay%</th>
           <th>Balance</th>
         </tr>
         </thead>
-          <tbody>
-          {
-            this.props.debts.map(debt => {
-              return(
-                  <tr key={debt.id}>
-                      <td className="select">
-                        <input type="checkbox" name="check1" id="child_check"
-                          onChange={this.onSelectChange}
-                          // onChange={this.calculateTotal}
-                         />
-                      </td>
-                      <td>{debt.creditorName}</td>
-                      <td>{debt.firstName}</td>
-                      <td>{debt.lastName}</td>
-                      <td>{debt.minPaymentPercentage}</td>
-                      <td>{debt.balance}</td>
-                    </tr>)
-                })
-              }
-          </tbody>
+        <tbody>
+        {
+          // transfrom each ofthe object in the array using map
+          this.props.debts.map((debt) => {
+            return(
+                <tr key={debt.id}>
+                    <td className="select">
+                      <input type="checkbox" name="check1" id="child_check" className="optional"
+                        onChange={this.onSelectChange.bind(this)}
+                        />
+                    </td>
+                    <td>{debt.creditorName}</td>
+                    <td>{debt.firstName}</td>
+                    <td>{debt.lastName}</td>
+                    <td>{debt.minPaymentPercentage}</td>
+                    <td>{debt.balance}</td>
+                  </tr>
+                )
+              })
+            }
+        </tbody>
         </table>
-
+        <br />
         <div>
-        <h4>Total: {this.state.total}</h4>
 
-            Check Row Count: {this.state.count}
-            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Total Row Count: {this.props.debts.length}</span>
+          <div id="myDiv">
+          <h4>Total: {this.state.total}</h4>
+
+              Check Row Count: {this.state.count}
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+              Total Row Count: {this.props.debts.length}
+
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+
+            <button className='dbutton' onClick={this.props.handleRemove}>REMOVE</button>
+          </div>
+          <br />
+          <hr />
 
 
-            <div className='dbutton' onClick={this.props.handleRemove} >
-            <button>REMOVE</button>
-            </div>
-            <br  />
         </div>
       </div>
+
     );
   }
 }
